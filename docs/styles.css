@@ -1,0 +1,44 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100%;
+  }
+  
+  .links-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    width: 300px;
+    height: 80px;
+    margin: 10px;
+    background-color: lightblue;
+    transition: all 0.3s ease;
+    font-size: 20px;
+  }
+  
+  .link-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .link:hover {
+    width: 350px;
+    height: 100px;
+  }
