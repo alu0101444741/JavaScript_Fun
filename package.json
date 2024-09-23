@@ -1,0 +1,25 @@
+{
+  "name": "javascriptfun",
+  "version": "1.0.0",
+  "description": "Index for all JavaScript_Fun projects",
+  "author": "Roberto Carrazana Pernía <alu0101444741@ull.es>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alu0101444741/JavaScript_Fun"
+  },
+  "scripts": {
+    "push": "rm *~; git pull; git add . ; git commit -m 'Code improvement'; git push",
+    "pull": "git pull",
+    "test": "jest",
+  },
+  "devDependencies": {
+  },  
+  "dependencies": {    
+  },
+  "keywords": [
+    "JavaScript",
+	"Fun"
+  ],
+  "type": "module"
+}
