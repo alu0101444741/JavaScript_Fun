@@ -13,41 +13,54 @@
  'use strict';
 
 import { Slot2D } from './slot2d.js';
-import { PUZZLE_DIMENSION } from '../SlidePuzzle/src/view/view.js';
 
 export class SlotBoard2D {
   _height;
-  _width;
+  _width;  
+  _rows;
+  _columns;
   _slots;
 
   /**
    * @desc Constructor de la clase SlotBoard2D.
    * @param {Number} height - altura máxima (eje x)
    * @param {Number} width - anchura máxima (eje y)
+   * @param {Number} dimensionX - dimensión X del puzzle (X x Y)
+   * @param {Number} dimensionY - dimensión Y del puzzle (X x Y)
    */
-  constructor(height, width) {
+  constructor(height, width, dimensionX, dimensionY) {
     this._height = height;
     this._width = width;
-    this._slots = [];
+    
+    this._rows = dimensionX;
+    this._columns = dimensionY;
 
-    let slotWidth = this._width / PUZZLE_DIMENSION;
-    let slotHeight = this._height / PUZZLE_DIMENSION;
-    for (let rows = 0; rows < PUZZLE_DIMENSION; ++ rows) {
+    let slotWidth = this._width / this._columns;
+    let slotHeight = this._height / this._rows;
+
+    let slotCoordinateX = 0;
+    let slotCoordinateY = 0;
+
+    this._slots = [];
+    for (let rows = 0; rows < this._rows; ++ rows) {
       this._slots.push([]);
-      for (let columns = 0; columns < PUZZLE_DIMENSION; ++ columns) {
-        this._slots[rows].push(new Slot2D(rows * slotHeight, columns * slotWidth, slotWidth, slotHeight))
+      for (let columns = 0; columns < this._columns; ++ columns) {
+        this._slots[rows].push(new Slot2D(slotCoordinateX, slotCoordinateY, slotWidth, slotHeight))
+        slotCoordinateX += slotWidth;
       }
-    }
+      slotCoordinateY += slotHeight;
+      slotCoordinateX = 0;
+    } 
   }
 
   /**
    * @desc Método para asignar una pieza de puzzle a una casilla del tablero.
    * @param {Number} row - fila
    * @param {Number} column - columna
-   * @param {PuzzlePiece} piece - pieza a asignar
+   * @param {Object2D} object2d - pieza a asignar
    */
-  setObject(row, column, piece) {
-    this._slots[row][column].setObject(piece);
+  setObject(row, column, object2d) {
+    this._slots[row][column].setObject(object2d);
   }
 
   /**
@@ -73,9 +86,9 @@ export class SlotBoard2D {
   /** @desc Método para desordenar el tablero. */
   shuffle() {    
     let swap, currentObject;
-    for (let rows = 1; rows < PUZZLE_DIMENSION; ++rows) {  
+    for (let rows = 1; rows < this._columns; ++rows) {  
       let objectsRemaining = this._slots[rows].length;
-      for (let columns = 3; (columns < PUZZLE_DIMENSION); ++ columns) {
+      for (let columns = 3; (columns < this._rows); ++ columns) {
         currentObject = Math.floor(Math.random() * objectsRemaining);
         --objectsRemaining;
         if (this._slots[rows][objectsRemaining].hasPiece) {
@@ -105,6 +118,14 @@ export class SlotBoard2D {
     return(this._slots);
   }
 
+  get rows() {
+    return this._rows;
+  }
+
+  get columns() {
+    return this._columns;
+  }
+
   /**
    * @desc Método para actualizar la altura y anchura para adecuarse a las del canvas.
    * @param {Number} height - nueva altura
@@ -113,10 +134,10 @@ export class SlotBoard2D {
   /* updateDimensions(height, width) {
     this._height = height;
     this._width = width;
-    let slotWidth = this._width / PUZZLE_DIMENSION;
-    let slotHeight = this._height / PUZZLE_DIMENSION;
-    for (let rows = 0; rows < PUZZLE_DIMENSION; ++ rows) {
-      for (let columns = 0; columns < PUZZLE_DIMENSION; ++ columns) {
+    let slotWidth = this._width / this._dimension;
+    let slotHeight = this._height / this._dimension;
+    for (let rows = 0; rows < this._dimension; ++ rows) {
+      for (let columns = 0; columns < this._dimension; ++ columns) {
         this._slots[rows][columns] = new Slot2D(rows * slotHeight, columns * slotWidth, slotWidth, slotHeight);
       }
     }

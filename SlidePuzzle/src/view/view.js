@@ -13,10 +13,10 @@
  'use static';
 
 import { CanvasView } from '../../../utilities/canvasView.js';
-import { Point2D } from '../model/point2d.js';
+import { Point2D } from '../../../utilities/point2d.js';
 import { Puzzle } from '../model/puzzle.js';
 
-export const PUZZLE_DIMENSION = 4;
+const PUZZLE_DIMENSION = 4;
 
  /** @desc Clase View */
 export class View extends CanvasView {
@@ -30,13 +30,13 @@ export class View extends CanvasView {
     super(canvas);
 
     this.#image = new Image();
-    this.#image.src = '../../img/Secuestro.png';
+    this.#image.src = '../img/Secuestro.png';
     this._height = this.#image.naturalHeight;
     this._width = this.#image.naturalWidth;
     this._canvas.setAttribute('height', this._height);
     this._canvas.setAttribute('width', this._width);
 
-    this.#puzzle = new Puzzle(this.#image.src, PUZZLE_DIMENSION, this._height, this._width);
+    this.#puzzle = new Puzzle(this.#image.src, PUZZLE_DIMENSION, PUZZLE_DIMENSION, this._height, this._width);
   }
 
   /**
@@ -88,8 +88,8 @@ export class View extends CanvasView {
         if (slot.hasObject){
           let startCoordinateX = slot.topLeftPoint.coordinateX;
           let startCoordinateY = slot.topLeftPoint.coordinateY;
-          let imageCoordinateX = slot.pieceContained.piecePoint.coordinateX;
-          let imageCoordinateY = slot.pieceContained.piecePoint.coordinateY;
+          let imageCoordinateX = slot.objectContained.piecePoint.coordinateX;
+          let imageCoordinateY = slot.objectContained.piecePoint.coordinateY;
           this._context.drawImage(this.#image, imageCoordinateX, imageCoordinateY, width, height, startCoordinateX, startCoordinateY, width, height);
         }
       }

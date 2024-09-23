@@ -49,19 +49,19 @@ export class Body2D extends Object2D {
     let halfHeight = this._height / 2;
     
     if ((this.coordinateX - halfWidth) <= leftEdge) {
-      this._position.setComponentX(leftEdge + halfWidth);
+      this._position.setCoordinateX(leftEdge + halfWidth);
       this._velocity.setComponentX(-this._velocity.componentX);
     }
     if ((this.coordinateX + halfWidth) >= rightEdge) {
-      this._position.setComponentX(rightEdge - halfWidth);
+      this._position.setCoordinateX(rightEdge - halfWidth);
       this._velocity.setComponentX(-this._velocity.componentX);
     }
     if ((this.coordinateY + halfHeight) >= bottomEdge) {
-      this._position.setComponentY(bottomEdge - halfHeight);
+      this._position.setCoordinateY(bottomEdge - halfHeight);
       this._velocity.setComponentY(-this._velocity.componentY);
     }
     if ((this.coordinateY - halfHeight) <= topEdge) {
-      this._position.setComponentY(topEdge + halfHeight);
+      this._position.setCoordinateY(topEdge + halfHeight);
       this._velocity.setComponentY(-this._velocity.componentY);
     }
     

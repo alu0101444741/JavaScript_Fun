@@ -12,13 +12,12 @@
 
  'use static';
 
-import { Point2D } from "./point2d.js";
+import { Object2D } from "../../../utilities/object2d.js";
+import { Point2D } from "../../../utilities/point2d.js";
 
  /** @desc Clase PuzzlePiece */
-export class PuzzlePiece {
+export class PuzzlePiece extends Object2D {
   #image;
-  #height;
-  #width;
   #startPoint;
   /**
    * @desc Constructor de la clase PuzzlePiece
@@ -29,9 +28,8 @@ export class PuzzlePiece {
    * @param {Number} coordinateY - coordenada y del punto
    */
   constructor(image, height, width, coordinateX, coordinateY) {
+    super(coordinateX, coordinateY, height, width);
     this.#image = image;
-    this.#height = height;
-    this.#width = width;
     this.#startPoint = new Point2D(coordinateX, coordinateY);
   }
 

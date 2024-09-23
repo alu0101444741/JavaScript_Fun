@@ -16,9 +16,13 @@
 
 
 #back {
-  text-align: left;
-  text-indent: 30px;
-  background-color: azure;
+  display: inline;
+  color: black;
+  border-radius: 20px;
+  border: 3px solid midnightblue;
+  background-color: lightblue;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
 }
 
 body {  

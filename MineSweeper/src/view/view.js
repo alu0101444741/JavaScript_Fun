@@ -14,7 +14,7 @@
 
 import { CanvasView } from '../../../utilities/canvasView.js';
 import { MineSweeper } from '../model/minesweeper.js';
-import { Point2D } from '../model/point2d.js';
+import { Point2D } from '../../../utilities/point2d.js';
 
 const DEFAULT_BOARD_ROWS = 12;
 const DEFAULT_BOARD_COLUMNS = 12;
@@ -117,7 +117,7 @@ export class View extends CanvasView {
           }   
           else {
             this._context.fillStyle = NUMBER_COLORS[Math.min(slot.objectContained, NUMBER_COLORS.length - 1)];
-            this._context.fillText(slot.objectContained, slot.centerPoint.coordinateX, slot.centerPoint.coordinateY);
+            this._context.fillText(slot.objectContained, slot.coordinateX, slot.coordinateY);
           } 
         }        
         this._context.fill();
@@ -131,7 +131,7 @@ export class View extends CanvasView {
   _drawBomb(slot) {
     this._context.fillStyle = 'coral';
     const SPIKES_REDUCTION = 10;
-    this._context.ellipse(slot.centerPoint.coordinateX, slot.centerPoint.coordinateY, slot.height / 4, slot.width / 4, Math.PI / 4, 0, Math.PI * 2);
+    this._context.ellipse(slot.coordinateX, slot.coordinateY, slot.height / 4, slot.width / 4, Math.PI / 4, 0, Math.PI * 2);
 
     this._context.moveTo(slot.topLeftPoint.coordinateX + SPIKES_REDUCTION, slot.topLeftPoint.coordinateY + SPIKES_REDUCTION);
     this._context.lineTo(slot.bottomRightPoint.coordinateX - SPIKES_REDUCTION, slot.bottomRightPoint.coordinateY - SPIKES_REDUCTION);
@@ -139,11 +139,11 @@ export class View extends CanvasView {
     this._context.moveTo(slot.topLeftPoint.coordinateX + SPIKES_REDUCTION, slot.bottomRightPoint.coordinateY - SPIKES_REDUCTION);
     this._context.lineTo(slot.bottomRightPoint.coordinateX - SPIKES_REDUCTION, slot.topLeftPoint.coordinateY + SPIKES_REDUCTION);
 
-    this._context.moveTo(slot.topLeftPoint.coordinateX + SPIKES_REDUCTION / 2, slot.centerPoint.coordinateY);
-    this._context.lineTo(slot.bottomRightPoint.coordinateX - SPIKES_REDUCTION / 2, slot.centerPoint.coordinateY);
+    this._context.moveTo(slot.topLeftPoint.coordinateX + SPIKES_REDUCTION / 2, slot.coordinateY);
+    this._context.lineTo(slot.bottomRightPoint.coordinateX - SPIKES_REDUCTION / 2, slot.coordinateY);
 
-    this._context.moveTo(slot.centerPoint.coordinateX, slot.topLeftPoint.coordinateY + SPIKES_REDUCTION / 2);
-    this._context.lineTo(slot.centerPoint.coordinateX, slot.bottomRightPoint.coordinateY - SPIKES_REDUCTION / 2);
+    this._context.moveTo(slot.coordinateX, slot.topLeftPoint.coordinateY + SPIKES_REDUCTION / 2);
+    this._context.lineTo(slot.coordinateX, slot.bottomRightPoint.coordinateY - SPIKES_REDUCTION / 2);
   }
 
   /** @desc Método para dibujar las casillas */
@@ -154,20 +154,16 @@ export class View extends CanvasView {
 
     for (let rows = 0; rows < this.#boardRows; ++ rows) {
       for (const slot of this.#board.slots[rows]) {
-        let slotGradient = this._context.createRadialGradient(
-          slot.centerPoint.coordinateX,
-          slot.centerPoint.coordinateY,
+        this._context.fillStyle = this._createRadialGradient(
+          slot.coordinateX,
+          slot.coordinateY,          
+          slot.coordinateX,
+          slot.coordinateY,
           Math.min(slot.height, slot.width) / 4,
-          slot.centerPoint.coordinateX,
-          slot.centerPoint.coordinateY,
-          Math.min(slot.height, slot.width)
+          Math.min(slot.height, slot.width),
+          [[0, 'lightgray'], [0.9, 'gray'], [1, 'darkgray']]
         );
-        
-        slotGradient.addColorStop(0, 'lightgray');
-        slotGradient.addColorStop(0.9, 'gray');
-        slotGradient.addColorStop(1, 'darkgray');
-        this._context.fillStyle = slotGradient;  
-            
+
         this._context.fillRect(slot.topLeftPoint.coordinateX, slot.topLeftPoint.coordinateY, slot.width, slot.height);
         this._context.strokeRect(slot.topLeftPoint.coordinateX, slot.topLeftPoint.coordinateY, slot.width, slot.height);       
       }      

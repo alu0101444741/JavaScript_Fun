@@ -128,6 +128,15 @@
     this.#coordinateX += point.#coordinateX;
     this.#coordinateY += point.#coordinateY;
   }
+
+  /**
+   * @desc Método para sumar un punto al actual. Suma sus coordenadas.
+   * @param {Vector2D} vector - punto a sumar
+   */
+  addVector(vector) {
+    this.#coordinateX += vector.componentX;
+    this.#coordinateY += vector.componentY;
+  }
  
    /**
     * @desc Método para obtener la coordenada x del punto

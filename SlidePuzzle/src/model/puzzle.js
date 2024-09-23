@@ -12,10 +12,9 @@
 
  'use static';
 
-import { PUZZLE_DIMENSION } from '../view/view.js';
-import { Point2D } from './point2d.js';
+import { Point2D } from '../../../utilities/point2d.js';
 import { PuzzlePiece } from './puzzlepiece.js';
-import { SlotBoard2D } from './slotsBoard2d.js';
+import { SlotBoard2D } from '../../../utilities/slotsBoard2d.js';
 
  /** @desc Clase Puzzle */
 export class Puzzle {
@@ -24,7 +23,6 @@ export class Puzzle {
   #width;
   #imageHeight;
   #imageWidth;
-  #pieces;
   #pieceHeight;
   #pieceWidth;
   #board;
@@ -38,32 +36,31 @@ export class Puzzle {
    * @param {String} image - ruta/path de la imagen atribuida
    * @param {Number} pieces - dimensión del puzzle.
    */
-  constructor(image, pieces, height, width) {
+  constructor(image, dimensionX, dimensionY, height, width) {
     this.#image = new Image();
-    this.#image.src = image;
-    this.#pieces = pieces;
+    this.#image.src = image;    
 
     this.#height = height;
     this.#width = width;
 
     this.#imageHeight = this.#image.naturalHeight;
     this.#imageWidth = this.#image.naturalWidth;
-    this.#pieceHeight = this.#height / pieces;//this.#imageHeight / pieces;
-    this.#pieceWidth = this.#width / pieces;//this.#imageWidth / pieces;
+    this.#pieceHeight = this.#height / dimensionX;//this.#imageHeight / pieces;
+    this.#pieceWidth = this.#width / dimensionY;//this.#imageWidth / pieces;
 
-    this.#board = new SlotBoard2D(this.#height, this.#width);
-    this.#winningBoard = new SlotBoard2D(this.#height, this.#width);
+    this.#board = new SlotBoard2D(this.#height, this.#width, dimensionX, dimensionY);
+    this.#winningBoard = new SlotBoard2D(this.#height, this.#width, dimensionX, dimensionY);
     this.#victory = false;
     
-    for (let rows = 0; rows < this.#pieces; ++rows) {  
-      for (let columns = 0; columns < this.#pieces; ++columns) {
-        this.#board.setPiece(rows, columns, new PuzzlePiece(this.#image.src, this.#pieceHeight, this.#pieceWidth, rows * this.#pieceHeight, columns * this.#pieceWidth));
-        this.#winningBoard.setPiece(rows, columns, new PuzzlePiece(this.#image.src, this.#pieceHeight, this.#pieceWidth, rows * this.#pieceHeight, columns * this.#pieceWidth));
+    for (let rows = 0; rows < dimensionY; ++rows) {  
+      for (let columns = 0; columns < dimensionX; ++columns) {
+        this.#board.setObject(rows, columns, new PuzzlePiece(this.#image.src, this.#pieceHeight, this.#pieceWidth, rows * this.#pieceHeight, columns * this.#pieceWidth));
+        this.#winningBoard.setObject(rows, columns, new PuzzlePiece(this.#image.src, this.#pieceHeight, this.#pieceWidth, rows * this.#pieceHeight, columns * this.#pieceWidth));
       }
     }
-    this.#board.deletePiece(pieces - 1, pieces - 1);
-    this.#winningBoard.deletePiece(pieces - 1, pieces - 1);
-    this.#emptySpacePosition = new Point2D(pieces - 1, pieces - 1);
+    this.#board.deleteObject(dimensionX - 1, dimensionY - 1);
+    this.#winningBoard.deleteObject(dimensionX - 1, dimensionY - 1);
+    this.#emptySpacePosition = new Point2D(dimensionX - 1, dimensionY - 1);
     this.#shuffle();
   }
 
@@ -74,8 +71,8 @@ export class Puzzle {
    */
     movePiece(row, column) {
       if (this.emptySpotNeighbour(row, column)) {
-        this.#board.swapPieces(this.#board.getSlot(this.#emptySpacePosition.coordinateY, this.#emptySpacePosition.coordinateX), this.#board.getSlot(row, column));
-        this.#board.deletePiece(row, column);
+        this.#board.swapObjects(this.#board.getSlot(this.#emptySpacePosition.coordinateY, this.#emptySpacePosition.coordinateX), this.#board.getSlot(row, column));
+        this.#board.deleteObject(row, column);
         this.#emptySpacePosition.setCoordinateX(column);
         this.#emptySpacePosition.setCoordinateY(row);
       }
@@ -94,8 +91,8 @@ export class Puzzle {
      * @return {true | false} 'true' si ambos tableros son iguales
      */
     #checkBoard() {
-      for (let rows = 0; rows < this.#pieces; ++rows) {  
-        for (let columns = 0; columns < this.#pieces; ++columns) {
+      for (let rows = 0; rows < this.#board._dimensionY; ++rows) {  
+        for (let columns = 0; columns < this.#board._dimensionX; ++columns) {
           if ((this.#winningBoard.getSlot(rows, columns).hasPiece) && (this.#board.getSlot(rows, columns).hasPiece)) {
             let expectedCoordinateX = this.#winningBoard.getSlot(rows, columns).pieceContained.piecePoint.coordinateX;
             let expectedCoordinateY = this.#winningBoard.getSlot(rows, columns).pieceContained.piecePoint.coordinateY;        
@@ -112,8 +109,8 @@ export class Puzzle {
     #shuffle() {      
       for (let move = 0; move < 50; ++move) {
         let moveMade = false;
-        for (let rows = 0; (rows < this.#pieces) && !moveMade; ++rows) {  
-          for (let columns = 0; (columns < this.#pieces) && !moveMade; ++columns) {
+        for (let rows = 0; (rows < this.#board._dimensionY) && !moveMade; ++rows) {  
+          for (let columns = 0; (columns < this.#board._dimensionX) && !moveMade; ++columns) {
             if (this.emptySpotNeighbour(rows, columns)) {
               this.#board.swapPieces(this.#board.getSlot(this.#emptySpacePosition.coordinateY, this.#emptySpacePosition.coordinateX), this.#board.getSlot(rows, columns));
               this.#board.deletePiece(rows, columns);
@@ -159,7 +156,6 @@ export class Puzzle {
    get pieceWidth() {
     return(this.#pieceWidth);
   }
-
   
   /**
    * @desc Método getter para saber obtener el estado del tablero
@@ -174,7 +170,8 @@ export class Puzzle {
    * @param {Number} height - nueva altura del canvas
    * @param {Number} width - nueva anchura del canvas
    */
-  /*updateDimensions(height, width) {
+  /*
+  updateDimensions(height, width) {
     this.#height = height;
     this.#width = width;
     this.#pieceHeight = this.#height / PUZZLE_DIMENSION;
@@ -187,5 +184,6 @@ export class Puzzle {
       }
     }
     this.#board.deletePiece(this.#emptySpacePosition.coordinateY, this.#emptySpacePosition.coordinateX);
-  }*/
+  }
+  */
 }

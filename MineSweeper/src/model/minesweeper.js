@@ -12,7 +12,7 @@
 
  'use static';
 
-import { SlotBoard2D } from './slotsBoard2d.js';
+import { SlotBoard2D } from '../../../utilities/slotsBoard2d.js';
 
  /** @desc Clase MineSweeper */
 export class MineSweeper {
@@ -40,11 +40,12 @@ export class MineSweeper {
     this.#columns = columns;
     this.#board = new SlotBoard2D(this.#height, this.#width, rows, columns);
     
+    // Placing bombs
     for (let bombs = 0; bombs < bombsToPlace; ++bombs) {
       let row = Math.floor(rows * Math.random());
       let column =  Math.floor(columns * Math.random());     
       this.#board.setObject(row, column, 'bomb');
-    }
+    }    
     for (let row = 0; row < this.#board.rows; ++row) {      
       for (let column = 0; column < this.#board.columns; ++column) {
         if (this.#board.slots[row][column].objectContained !== 'bomb') {

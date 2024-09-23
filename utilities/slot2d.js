@@ -30,7 +30,7 @@ export class Slot2D extends Object2D {
    * @param {Number} height - altura la casilla
    */
   constructor(coordinateX, coordinateY, width, height, color = "") {    
-    super(coordinateX, coordinateY, height, width, color)
+    super(coordinateX + width / 2, coordinateY + height / 2, height, width, color);
     this._topLeftPoint = new Point2D(coordinateX, coordinateY);
     this._bottomRightPoint = new Point2D(coordinateX + width, coordinateY + height);
     this._objectContained = null;

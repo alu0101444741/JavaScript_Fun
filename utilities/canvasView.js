@@ -81,12 +81,6 @@ export class CanvasView {
     for(const colorStop of colorStops) {
       gradient.addColorStop(colorStop[0], colorStop[1]);
     }
-    /*
-    gradient.addColorStop(0, 'lightgreen');
-    gradient.addColorStop(0.1, 'lightgreen');
-    gradient.addColorStop(0.9, 'green');
-    gradient.addColorStop(1, 'darkgreen');
-    */
     return gradient;
   }
 

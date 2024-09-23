@@ -11,6 +11,8 @@
 
 'use strict';
 
+import { Point2D } from "./point2d.js";
+
 /** @desc Clase Object2D */
 export class Object2D {
   _height;

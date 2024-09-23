@@ -12,9 +12,9 @@
  'use static';
 
 import { CanvasView } from "../../../utilities/canvasView.js";
-import { Body2D } from "../model/classes/body2d.js";
-import { Vector2D } from "../model/classes/vector2d.js";
-import { Point2D } from "../model/classes/point2d.js";
+import { Body2D } from "../../../utilities/body2d.js";
+import { Vector2D } from "../../../utilities/vector2d.js";
+import { Point2D } from "../../../utilities/point2d.js";
 
 const DISTANCE = 5;
 const BODY_SIZE = 20;
